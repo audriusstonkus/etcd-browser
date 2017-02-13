@@ -1,7 +1,7 @@
 object MainForm: TMainForm
-  Left = 371
+  Left = 340
   Height = 656
-  Top = 299
+  Top = 174
   Width = 990
   Caption = 'ETCD Browser'
   ClientHeight = 656
@@ -10,39 +10,40 @@ object MainForm: TMainForm
   Constraints.MinWidth = 800
   OnCreate = FormCreate
   OnResize = FormResize
-  LCLVersion = '1.6.0.4'
+  LCLVersion = '1.6.2.0'
   object m_statusBar: TStatusBar
     Left = 0
-    Height = 22
-    Top = 634
+    Height = 21
+    Top = 635
     Width = 990
     Panels = <>
   end
   object m_splitter: TSplitter
     Left = 339
-    Height = 570
+    Height = 571
     Top = 64
     Width = 5
   end
   object m_treeGroup: TGroupBox
     Left = 0
-    Height = 570
+    Height = 571
     Top = 64
     Width = 339
     Align = alLeft
     Caption = 'Nodes'
     ClientHeight = 552
-    ClientWidth = 331
+    ClientWidth = 335
     Constraints.MinWidth = 302
     TabOrder = 2
     object m_tree: TTreeView
       Left = 0
       Height = 516
       Top = 36
-      Width = 331
+      Width = 335
       Align = alClient
       AutoExpand = True
       Images = m_treeImages
+      PopupMenu = m_treePopup
       ReadOnly = True
       StateImages = m_treeImages
       TabOrder = 0
@@ -53,7 +54,7 @@ object MainForm: TMainForm
       Left = 0
       Height = 36
       Top = 0
-      Width = 331
+      Width = 335
       Align = alTop
       BevelOuter = bvNone
       ChildSizing.EnlargeHorizontal = crsHomogenousChildResize
@@ -61,7 +62,7 @@ object MainForm: TMainForm
       ChildSizing.Layout = cclLeftToRightThenTopToBottom
       ChildSizing.ControlsPerLine = 4
       ClientHeight = 36
-      ClientWidth = 331
+      ClientWidth = 335
       Color = clBackground
       Constraints.MinWidth = 300
       ParentColor = False
@@ -208,20 +209,20 @@ object MainForm: TMainForm
   end
   object m_valueGroup: TGroupBox
     Left = 344
-    Height = 570
+    Height = 571
     Top = 64
     Width = 646
     Align = alClient
     Caption = 'Keys && Values'
     ClientHeight = 552
-    ClientWidth = 638
+    ClientWidth = 642
     Constraints.MinWidth = 200
     TabOrder = 3
     object m_valueButtonPanel: TPanel
       Left = 0
       Height = 36
       Top = 0
-      Width = 638
+      Width = 642
       Align = alTop
       BevelOuter = bvNone
       ChildSizing.EnlargeHorizontal = crsHomogenousChildResize
@@ -229,7 +230,7 @@ object MainForm: TMainForm
       ChildSizing.Layout = cclLeftToRightThenTopToBottom
       ChildSizing.ControlsPerLine = 4
       ClientHeight = 36
-      ClientWidth = 638
+      ClientWidth = 642
       Color = clBackground
       Constraints.MinWidth = 300
       ParentColor = False
@@ -377,10 +378,11 @@ object MainForm: TMainForm
       Left = 0
       Height = 516
       Top = 36
-      Width = 638
+      Width = 642
       Align = alClient
       AutoAdvance = aaNone
       FixedCols = 0
+      PopupMenu = m_valuePopup
       RowCount = 2
       ScrollBars = ssVertical
       TabOrder = 1
@@ -409,15 +411,15 @@ object MainForm: TMainForm
     Width = 990
     Align = alTop
     Caption = 'Connection'
-    ClientHeight = 46
-    ClientWidth = 982
+    ClientHeight = 45
+    ClientWidth = 986
     Constraints.MinWidth = 800
     TabOrder = 4
     object m_serverLabel: TLabel
       Left = 16
       Height = 17
       Top = 13
-      Width = 77
+      Width = 74
       Caption = 'ETCD Server:'
       ParentColor = False
     end
@@ -426,7 +428,7 @@ object MainForm: TMainForm
       Height = 27
       Top = 8
       Width = 312
-      ItemHeight = 23
+      ItemHeight = 0
       OnKeyDown = m_serverEditKeyDown
       OnSelect = m_serverEditSelect
       TabOrder = 0
@@ -435,7 +437,7 @@ object MainForm: TMainForm
       Left = 427
       Height = 17
       Top = 13
-      Width = 64
+      Width = 60
       Caption = 'ETCD Port:'
       ParentColor = False
     end
@@ -449,7 +451,7 @@ object MainForm: TMainForm
       Value = 2379
     end
     object m_connectButton: TBitBtn
-      Left = 749
+      Left = 753
       Height = 30
       Top = 6
       Width = 112
@@ -495,7 +497,7 @@ object MainForm: TMainForm
       TabOrder = 2
     end
     object m_disconnectButton: TBitBtn
-      Left = 859
+      Left = 863
       Height = 30
       Top = 6
       Width = 112
@@ -708,5 +710,29 @@ object MainForm: TMainForm
       FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
       FF00FFFFFF00FFFFFF00FFFFFF00
     }
+  end
+  object m_treePopup: TPopupMenu
+    left = 80
+    top = 584
+    object m_treeCopyItem: TMenuItem
+      Caption = 'Copy path'
+      OnClick = m_treeCopyItemClick
+    end
+    object m_treeRemoveItem: TMenuItem
+      Caption = 'Remove ...'
+      OnClick = m_treeRemoveItemClick
+    end
+  end
+  object m_valuePopup: TPopupMenu
+    left = 360
+    top = 592
+    object m_valueCopyItem: TMenuItem
+      Caption = 'Copy path'
+      OnClick = m_valueCopyItemClick
+    end
+    object m_valueRemoveItem: TMenuItem
+      Caption = 'Remove ...'
+      OnClick = m_valueRemoveItemClick
+    end
   end
 end

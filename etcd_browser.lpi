@@ -16,15 +16,18 @@
     <VersionInfo>
       <StringTable ProductVersion=""/>
     </VersionInfo>
-    <MacroValues Count="1">
-      <Macro3 Name="LCLWidgetType" Value="qt"/>
+    <MacroValues Count="4">
+      <Macro6 Name="LCLWidgetType" Value="gtk2"/>
     </MacroValues>
     <BuildModes Count="1">
       <Item1 Name="Default" Default="True"/>
-      <SharedMatrixOptions Count="3">
+      <SharedMatrixOptions Count="6">
         <Item1 ID="347449654399" Type="IDEMacro" MacroName="LCLWidgetType" Value="gtk2"/>
         <Item2 ID="817957190739" Value="-dDisableUTF8RTL"/>
-        <Item3 ID="486268342848" Modes="Default" Type="IDEMacro" MacroName="LCLWidgetType" Value="qt"/>
+        <Item3 ID="486268342848" Modes="Default" Type="IDEMacro"/>
+        <Item4 ID="859291070319" Modes="Default" Type="IDEMacro"/>
+        <Item5 ID="783685995657" Modes="Default" Type="IDEMacro"/>
+        <Item6 ID="649780059780" Modes="Default" Type="IDEMacro" MacroName="LCLWidgetType" Value="gtk2"/>
       </SharedMatrixOptions>
     </BuildModes>
     <PublishOptions>

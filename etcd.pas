@@ -5,7 +5,7 @@ unit Etcd;
 interface
 
 uses
-  Classes, SysUtils, Utils, fphttpclient, fpjson, jsonparser;
+  Classes, SysUtils, fpjson, jsonparser;
 
 type TEtcdValue = class(TObject)
   private
@@ -134,7 +134,6 @@ begin
 end;
 
 procedure TEtcdNode.ClearValues;
-var i: integer;
 begin
   SetLength(m_values, 0);
 end;

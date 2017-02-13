@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ExtCtrls,
-  ComCtrls, StdCtrls, Spin, Buttons, ValEdit, Grids, LCLType,
+  ComCtrls, StdCtrls, Spin, Buttons, ValEdit, Grids, LCLType, Menus, Clipbrd,
   Etcd, Rest;
 
 type
@@ -14,6 +14,10 @@ type
   { TMainForm }
 
   TMainForm = class(TForm)
+    m_valueCopyItem: TMenuItem;
+    m_valuePopup: TPopupMenu;
+    m_treeRemoveItem: TMenuItem;
+    m_treeCopyItem: TMenuItem;
     m_treeImages: TImageList;
     m_treeAddButton: TBitBtn;
     m_connectButton: TBitBtn;
@@ -22,6 +26,7 @@ type
     m_serverLabel: TLabel;
     m_connectionGroup: TGroupBox;
     m_portLabel: TLabel;
+    m_valueRemoveItem: TMenuItem;
     m_valueAddButton: TBitBtn;
     m_valueButtonPanel: TPanel;
     m_valueRefreshButton: TBitBtn;
@@ -36,20 +41,25 @@ type
     m_portEdit: TSpinEdit;
     m_treeButtonPanel: TPanel;
     m_values: TValueListEditor;
+    m_treePopup: TPopupMenu;
     procedure FormCreate(Sender: TObject);
     procedure FormResize(Sender: TObject);
+    procedure m_treeCopyItemClick(Sender: TObject);
     procedure m_connectButtonClick(Sender: TObject);
     procedure m_disconnectButtonClick(Sender: TObject);
     procedure m_serverEditKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
     procedure m_serverEditSelect(Sender: TObject);
     procedure m_treeAddButtonClick(Sender: TObject);
+    procedure m_treeRemoveItemClick(Sender: TObject);
     procedure m_treeRefreshButtonClick(Sender: TObject);
     procedure m_treeRemoveButtonClick(Sender: TObject);
     procedure m_treeSelectionChanged(Sender: TObject);
     procedure m_valueAddButtonClick(Sender: TObject);
+    procedure m_valueCopyItemClick(Sender: TObject);
     procedure m_valueRefreshButtonClick(Sender: TObject);
     procedure m_valueRemoveButtonClick(Sender: TObject);
+    procedure m_valueRemoveItemClick(Sender: TObject);
     procedure m_valuesEditingDone(Sender: TObject);
     procedure m_valuesKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
@@ -193,6 +203,11 @@ begin
   end;
 end;
 
+procedure TMainForm.m_treeRemoveItemClick(Sender: TObject);
+begin
+  m_treeRemoveButtonClick(Sender);
+end;
+
 procedure TMainForm.m_treeRefreshButtonClick(Sender: TObject);
 begin
   Connect;
@@ -241,6 +256,15 @@ begin
   end;
 end;
 
+procedure TMainForm.m_valueCopyItemClick(Sender: TObject);
+var ActiveValue: TEtcdValue;
+begin
+  if (m_values.Row > 0) and (m_values.Keys[m_values.Row] <> '') then begin
+    ActiveValue := TEtcdValue(m_values.Objects[0, m_values.Row]);
+    Clipboard.AsText := ActiveValue.Key;
+  end;
+end;
+
 procedure TMainForm.m_valueRefreshButtonClick(Sender: TObject);
 begin
   LoadValues;
@@ -264,6 +288,11 @@ begin
       MessageDlg('Error', 'Error occured: ' + E.Message, mtError, [mbOK], 0);
     end;
   end;
+end;
+
+procedure TMainForm.m_valueRemoveItemClick(Sender: TObject);
+begin
+  m_valueRemoveButtonClick(Sender);
 end;
 
 procedure TMainForm.m_valuesEditingDone(Sender: TObject);
@@ -327,6 +356,15 @@ procedure TMainForm.FormResize(Sender: TObject);
 begin
   m_values.ColWidths[0] := Round(m_values.Width * 0.3);
   m_values.ColWidths[1] := Round(m_values.Width * 0.6);
+end;
+
+procedure TMainForm.m_treeCopyItemClick(Sender: TObject);
+var ActiveNode: TEtcdNode;
+begin
+  if Assigned(m_tree.Selected) then begin
+    ActiveNode := TEtcdNode(m_tree.Selected.Data);
+    Clipboard.AsText := ActiveNode.Name;
+  end;
 end;
 
 procedure TMainForm.LoadMRU;
