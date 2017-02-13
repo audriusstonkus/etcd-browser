@@ -1,0 +1,68 @@
+object NameWindow: TNameWindow
+  Left = 440
+  Height = 170
+  Top = 396
+  Width = 600
+  BorderStyle = bsDialog
+  Caption = 'Create new'
+  ClientHeight = 170
+  ClientWidth = 600
+  LCLVersion = '1.6.2.0'
+  object m_groupBox: TGroupBox
+    Left = 0
+    Height = 120
+    Top = 0
+    Width = 600
+    Align = alClient
+    Caption = 'Name'
+    ClientHeight = 101
+    ClientWidth = 596
+    TabOrder = 0
+    object m_nameLabel: TLabel
+      Left = 25
+      Height = 17
+      Top = 18
+      Width = 131
+      Caption = 'Name for new element:'
+      ParentColor = False
+    end
+    object m_nameEdit: TEdit
+      Left = 25
+      Height = 27
+      Top = 48
+      Width = 550
+      TabOrder = 0
+    end
+  end
+  object m_buttonPanel: TPanel
+    Left = 0
+    Height = 50
+    Top = 120
+    Width = 600
+    Align = alBottom
+    BevelOuter = bvNone
+    ClientHeight = 50
+    ClientWidth = 600
+    TabOrder = 1
+    object m_okButton: TButton
+      Left = 145
+      Height = 40
+      Top = 7
+      Width = 144
+      Caption = '&OK'
+      Default = True
+      OnClick = m_okButtonClick
+      TabOrder = 0
+    end
+    object m_cancelButton: TButton
+      Left = 321
+      Height = 40
+      Top = 7
+      Width = 144
+      Cancel = True
+      Caption = '&Cancel'
+      OnClick = m_cancelButtonClick
+      TabOrder = 1
+    end
+  end
+end

@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <ProjectOptions>
+    <Version Value="9"/>
+    <General>
+      <SessionStorage Value="InProjectDir"/>
+      <MainUnit Value="0"/>
+      <Title Value="etcd_browser"/>
+      <ResourceType Value="res"/>
+      <UseXPManifest Value="True"/>
+      <Icon Value="0"/>
+    </General>
+    <i18n>
+      <EnableI18N LFM="False"/>
+    </i18n>
+    <VersionInfo>
+      <StringTable ProductVersion=""/>
+    </VersionInfo>
+    <MacroValues Count="1">
+      <Macro3 Name="LCLWidgetType" Value="qt"/>
+    </MacroValues>
+    <BuildModes Count="1">
+      <Item1 Name="Default" Default="True"/>
+      <SharedMatrixOptions Count="3">
+        <Item1 ID="347449654399" Type="IDEMacro" MacroName="LCLWidgetType" Value="gtk2"/>
+        <Item2 ID="817957190739" Value="-dDisableUTF8RTL"/>
+        <Item3 ID="486268342848" Modes="Default" Type="IDEMacro" MacroName="LCLWidgetType" Value="qt"/>
+      </SharedMatrixOptions>
+    </BuildModes>
+    <PublishOptions>
+      <Version Value="2"/>
+    </PublishOptions>
+    <RunParams>
+      <local>
+        <FormatVersion Value="1"/>
+      </local>
+    </RunParams>
+    <RequiredPackages Count="1">
+      <Item1>
+        <PackageName Value="LCL"/>
+      </Item1>
+    </RequiredPackages>
+    <Units Count="6">
+      <Unit0>
+        <Filename Value="etcd_browser.lpr"/>
+        <IsPartOfProject Value="True"/>
+      </Unit0>
+      <Unit1>
+        <Filename Value="mainwindow.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="MainForm"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="MainWindow"/>
+      </Unit1>
+      <Unit2>
+        <Filename Value="etcd.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="Etcd"/>
+      </Unit2>
+      <Unit3>
+        <Filename Value="utils.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="Utils"/>
+      </Unit3>
+      <Unit4>
+        <Filename Value="namewindow.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="NameWindow"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="NameWindow"/>
+      </Unit4>
+      <Unit5>
+        <Filename Value="rest.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="Rest"/>
+      </Unit5>
+    </Units>
+  </ProjectOptions>
+  <CompilerOptions>
+    <Version Value="11"/>
+    <Target>
+      <Filename Value="etcd_browser"/>
+    </Target>
+    <SearchPaths>
+      <IncludeFiles Value="$(ProjOutDir)"/>
+      <UnitOutputDirectory Value="lib/$(TargetCPU)-$(TargetOS)"/>
+    </SearchPaths>
+    <Linking>
+      <Options>
+        <Win32>
+          <GraphicApplication Value="True"/>
+        </Win32>
+      </Options>
+    </Linking>
+  </CompilerOptions>
+  <Debugging>
+    <Exceptions Count="5">
+      <Item1>
+        <Name Value="EAbort"/>
+      </Item1>
+      <Item2>
+        <Name Value="ECodetoolError"/>
+      </Item2>
+      <Item3>
+        <Name Value="EFOpenError"/>
+      </Item3>
+      <Item4>
+        <Name Value="ESocketError"/>
+      </Item4>
+      <Item5>
+        <Name Value="Exception"/>
+      </Item5>
+    </Exceptions>
+  </Debugging>
+</CONFIG>
