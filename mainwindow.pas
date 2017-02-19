@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ExtCtrls,
   ComCtrls, StdCtrls, Spin, Buttons, ValEdit, Grids, LCLType, Menus, Clipbrd,
-  Etcd, Rest;
+  Etcd, Rest, Types;
 
 type
 
@@ -44,6 +44,8 @@ type
     m_treePopup: TPopupMenu;
     procedure FormCreate(Sender: TObject);
     procedure FormResize(Sender: TObject);
+    procedure m_treeContextPopup(Sender: TObject; MousePos: TPoint;
+      var Handled: Boolean);
     procedure m_treeCopyItemClick(Sender: TObject);
     procedure m_connectButtonClick(Sender: TObject);
     procedure m_disconnectButtonClick(Sender: TObject);
@@ -60,9 +62,13 @@ type
     procedure m_valueRefreshButtonClick(Sender: TObject);
     procedure m_valueRemoveButtonClick(Sender: TObject);
     procedure m_valueRemoveItemClick(Sender: TObject);
+    procedure m_valuesContextPopup(Sender: TObject; MousePos: TPoint;
+      var Handled: Boolean);
     procedure m_valuesEditingDone(Sender: TObject);
     procedure m_valuesKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
+    procedure m_valuesMouseDown(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
   private
     RestClient: TEtcdRestClient;
     procedure AddTreeItems(TreeNode: TTreeNode; EtcdNode: TEtcdNode);
@@ -114,6 +120,8 @@ begin
     m_values.Options := m_values.Options + [goEditing]
   else
     m_values.Options := m_values.Options - [goEditing];
+  m_values.Row := 1;
+  m_values.Col := 1;
 end;
 
 procedure TMainForm.Disconnect;
@@ -154,8 +162,10 @@ begin
       SaveMRU;
     end;
   except
-    on E: Exception do
+    on E: Exception do begin
       MessageDlg('Error', 'Error occured: ' + E.Message, mtError, [mbOK], 0);
+      Disconnect;
+    end;
   end;
 end;
 
@@ -295,6 +305,15 @@ begin
   m_valueRemoveButtonClick(Sender);
 end;
 
+procedure TMainForm.m_valuesContextPopup(Sender: TObject; MousePos: TPoint;
+  var Handled: Boolean);
+var GridCoord: TGridCoord;
+begin
+  GridCoord := m_values.MouseCoord(MousePos.X, MousePos.Y);
+  if not Assigned(RestClient) or not (m_values.Row > 0) or not(GridCoord.Y > 0)
+    or not (m_values.Keys[m_values.Row] <> '') then Handled := true;
+end;
+
 procedure TMainForm.m_valuesEditingDone(Sender: TObject);
 var ActiveValue: TEtcdValue;
     NewValue: string;
@@ -327,6 +346,16 @@ begin
   end;
 end;
 
+procedure TMainForm.m_valuesMouseDown(Sender: TObject; Button: TMouseButton;
+  Shift: TShiftState; X, Y: Integer);
+var GridCoord: TGridCoord;
+begin
+  if Button = mbRight then begin
+    GridCoord := m_values.MouseCoord(X, Y);
+    m_values.Row := GridCoord.Y;
+    m_values.Col := GridCoord.X;
+  end;
+end;
 
 procedure TMainForm.LoadValues;
 var ActiveNode: TEtcdNode;
@@ -345,7 +374,6 @@ begin
   end;
 end;
 
-
 procedure TMainForm.FormCreate(Sender: TObject);
 begin
   Disconnect;
@@ -356,6 +384,12 @@ procedure TMainForm.FormResize(Sender: TObject);
 begin
   m_values.ColWidths[0] := Round(m_values.Width * 0.3);
   m_values.ColWidths[1] := Round(m_values.Width * 0.6);
+end;
+
+procedure TMainForm.m_treeContextPopup(Sender: TObject; MousePos: TPoint;
+  var Handled: Boolean);
+begin
+  if not Assigned(m_tree.Selected) then Handled := true;
 end;
 
 procedure TMainForm.m_treeCopyItemClick(Sender: TObject);

@@ -45,10 +45,12 @@ object MainForm: TMainForm
       Images = m_treeImages
       PopupMenu = m_treePopup
       ReadOnly = True
+      RightClickSelect = True
       StateImages = m_treeImages
       TabOrder = 0
+      OnContextPopup = m_treeContextPopup
       OnSelectionChanged = m_treeSelectionChanged
-      Options = [tvoAutoExpand, tvoAutoItemHeight, tvoHideSelection, tvoKeepCollapsedNodes, tvoReadOnly, tvoShowButtons, tvoShowLines, tvoShowRoot, tvoToolTips]
+      Options = [tvoAutoExpand, tvoAutoItemHeight, tvoHideSelection, tvoKeepCollapsedNodes, tvoReadOnly, tvoRightClickSelect, tvoShowButtons, tvoShowLines, tvoShowRoot, tvoToolTips]
     end
     object m_treeButtonPanel: TPanel
       Left = 0
@@ -386,11 +388,13 @@ object MainForm: TMainForm
       RowCount = 2
       ScrollBars = ssVertical
       TabOrder = 1
+      OnContextPopup = m_valuesContextPopup
       OnEditingDone = m_valuesEditingDone
       OnKeyDown = m_valuesKeyDown
+      OnMouseDown = m_valuesMouseDown
       DisplayOptions = [doColumnTitles, doKeyColFixed]
       KeyOptions = [keyUnique]
-      Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goColSizing, goThumbTracking]
+      Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goColSizing, goThumbTracking, goRowHighlight]
       Strings.Strings = (
         ''
       )
