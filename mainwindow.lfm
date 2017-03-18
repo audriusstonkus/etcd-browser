@@ -49,6 +49,7 @@ object MainForm: TMainForm
       StateImages = m_treeImages
       TabOrder = 0
       OnContextPopup = m_treeContextPopup
+      OnKeyDown = m_treeKeyDown
       OnSelectionChanged = m_treeSelectionChanged
       Options = [tvoAutoExpand, tvoAutoItemHeight, tvoHideSelection, tvoKeepCollapsedNodes, tvoReadOnly, tvoRightClickSelect, tvoShowButtons, tvoShowLines, tvoShowRoot, tvoToolTips]
     end

@@ -43,7 +43,7 @@
         <PackageName Value="LCL"/>
       </Item1>
     </RequiredPackages>
-    <Units Count="6">
+    <Units Count="7">
       <Unit0>
         <Filename Value="etcd_browser.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -79,6 +79,10 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="Rest"/>
       </Unit5>
+      <Unit6>
+        <Filename Value="customhttpclient.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit6>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

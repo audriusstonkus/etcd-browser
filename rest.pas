@@ -10,11 +10,11 @@ uses
 const
   ETCD_PROTOCOL = 'http';
   ETCD_PREFIX = '/v2/keys';
+  ETCD_TIMEOUT = 1000;
 
 type TEtcdRestClient = class(TObject)
   private
     BaseUrl: string;
-    //HttpClient: TFPHTTPClient;
     function SafeName(Name: string): string;
   public
     constructor Create(Server: string; Port: integer);
@@ -33,8 +33,6 @@ implementation
 constructor TEtcdRestClient.Create(Server: string; Port: integer);
 begin
   BaseUrl := ETCD_PROTOCOL + '://' + Server + ':' + IntToStr(Port) + ETCD_PREFIX;
-  //HttpClient := TFPHTTPClient.Create(Nil);
-  //HttpClient.AddHeader('Content-Type', 'application/x-www-form-urlencoded');
 end;
 
 destructor TEtcdRestClient.Destroy;
@@ -54,6 +52,7 @@ function TEtcdRestClient.LoadFolders: TJSONData;
 var StrJson: string;
 begin
   with TFPHTTPClient.Create(Nil) do try
+    IOTimeout := ETCD_TIMEOUT;
     StrJson := Get(BaseUrl + '?recursive=true');
     LoadFolders := GetJSON(StrJson);
   finally
@@ -65,6 +64,7 @@ function TEtcdRestClient.LoadValuesInFolder(Node: string): TJSONData;
 var StrJson: string;
 begin
   with TFPHTTPClient.Create(Nil) do try
+    IOTimeout := ETCD_TIMEOUT;
     StrJson := Get(BaseUrl + Node);
     LoadValuesInFolder := GetJSON(StrJson);
   finally
@@ -83,6 +83,7 @@ begin
   data.WriteString('dir=true');
   data.Seek(0, 0);
   with TFPHTTPClient.Create(Nil) do try
+    IOTimeout := ETCD_TIMEOUT;
     AddHeader('Content-Type', 'application/x-www-form-urlencoded');
     RequestBody := data;
     Response := Put(BaseUrl + FullPath);
@@ -98,6 +99,7 @@ var FullPath, Response: string;
 begin
   FullPath := Path + '?dir=true&recursive=true';
   with TFPHTTPClient.Create(Nil) do try
+    IOTimeout := ETCD_TIMEOUT;
     Response := Delete(BaseUrl + FullPath);
     if ResponseStatusCode >= 300 then
       raise Exception.Create(IntToStr(ResponseStatusCode) + ' ' + Response);
@@ -113,6 +115,7 @@ begin
   if Path <> '/' then
     FullPath := Path + FullPath;
   with TFPHTTPClient.Create(Nil) do try
+    IOTimeout := ETCD_TIMEOUT;
     Response := Put(BaseUrl + FullPath);
     if ResponseStatusCode >= 300 then
       raise Exception.Create(IntToStr(ResponseStatusCode) + ' ' + Response);
@@ -125,6 +128,7 @@ procedure TEtcdRestClient.DeleteKey(Path: string);
 var Response: string;
 begin
   with TFPHTTPClient.Create(Nil) do try
+    IOTimeout := ETCD_TIMEOUT;
     Response := Delete(BaseUrl + Path);
     if ResponseStatusCode >= 300 then
       raise Exception.Create(IntToStr(ResponseStatusCode) + ' ' + Response);
@@ -138,9 +142,10 @@ var Response: string;
     data: TStringStream;
 begin
   data := TStringStream.Create('');
-  data.WriteString('value=' + Value + '');
+  data.WriteString('value=' + EncodeURLElement(Value) + '');
   data.Seek(0, 0);
   with TFPHTTPClient.Create(Nil) do try
+    IOTimeout := ETCD_TIMEOUT;
     RequestBody := data;
     AddHeader('Content-Type', 'application/x-www-form-urlencoded');
     Response := Put(BaseUrl + Key);

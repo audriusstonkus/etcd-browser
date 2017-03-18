@@ -53,6 +53,7 @@ type
       Shift: TShiftState);
     procedure m_serverEditSelect(Sender: TObject);
     procedure m_treeAddButtonClick(Sender: TObject);
+    procedure m_treeKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure m_treeRemoveItemClick(Sender: TObject);
     procedure m_treeRefreshButtonClick(Sender: TObject);
     procedure m_treeRemoveButtonClick(Sender: TObject);
@@ -213,6 +214,23 @@ begin
   end;
 end;
 
+procedure TMainForm.m_treeKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if (ssShift in Shift) or (ssCtrl in Shift) or (ssAlt in Shift) then
+    exit;
+  case Key of
+    VK_DELETE: begin
+      m_treeRemoveButtonClick(Nil);
+      Key := 0;
+    end;
+    VK_INSERT: begin
+      m_treeAddButtonClick(Nil);
+      Key := 0;
+    end;
+  end;
+end;
+
 procedure TMainForm.m_treeRemoveItemClick(Sender: TObject);
 begin
   m_treeRemoveButtonClick(Sender);
@@ -334,6 +352,8 @@ end;
 procedure TMainForm.m_valuesKeyDown(Sender: TObject; var Key: Word;
   Shift: TShiftState);
 begin
+  if (ssShift in Shift) or (ssCtrl in Shift) or (ssAlt in Shift) then
+    exit;
   case Key of
     VK_DELETE: begin
       m_valueRemoveButtonClick(Nil);
