@@ -2,3 +2,4 @@
 lib
 /etcd_browser
 backup
+*.exe 
