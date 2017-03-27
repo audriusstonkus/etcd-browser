@@ -5,18 +5,30 @@ unit Utils;
 interface
 
 uses
-  Classes, SysUtils;
+  Classes, SysUtils, fpjson;
 
 type
   TCompareFunc = function (const elem1, elem2): Integer;
 
 procedure AnySort(var Arr; Count: Integer; Stride: Integer; CompareFunc: TCompareFunc);
+function IsJson(text: string): boolean;
 
 implementation
 
 type
   TByteArray = array [Word] of byte;
   PByteArray = ^TByteArray;
+
+function IsJson(text: string): boolean;
+var json: TJsonData;
+begin
+  try
+    json := GetJson(text);
+    Result := json <> Nil;
+  except
+    Result := false;
+  end;
+end;
 
 procedure AnyQuickSort(var Arr; idxL, idxH: Integer;
   Stride: Integer; CompareFunc: TCompareFunc; var SwapBuf);

@@ -19,7 +19,7 @@ type TEtcdRestClient = class(TObject)
   public
     constructor Create(Server: string; Port: integer);
     destructor Destroy; override;
-    function LoadFolders: TJSONData;
+    function LoadFolders(Path: string = ''): TJSONData;
     function LoadValuesInFolder(Node: string): TJSONData;
     procedure CreateFolder(Path: string; Name: string);
     procedure DeleteFolder(Path: string);
@@ -48,12 +48,12 @@ begin
   Result := Name;
 end;
 
-function TEtcdRestClient.LoadFolders: TJSONData;
+function TEtcdRestClient.LoadFolders(Path: string = ''): TJSONData;
 var StrJson: string;
 begin
   with TFPHTTPClient.Create(Nil) do try
     IOTimeout := ETCD_TIMEOUT;
-    StrJson := Get(BaseUrl + '?recursive=true');
+    StrJson := Get(BaseUrl + Path + '?recursive=true');
     LoadFolders := GetJSON(StrJson);
   finally
     Free;

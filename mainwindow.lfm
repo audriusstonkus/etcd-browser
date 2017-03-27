@@ -13,36 +13,35 @@ object MainForm: TMainForm
   LCLVersion = '1.6.2.0'
   object m_statusBar: TStatusBar
     Left = 0
-    Height = 23
-    Top = 633
+    Height = 21
+    Top = 635
     Width = 990
     Panels = <>
   end
   object m_splitter: TSplitter
     Left = 339
-    Height = 569
+    Height = 571
     Top = 64
     Width = 5
   end
   object m_treeGroup: TGroupBox
     Left = 0
-    Height = 569
+    Height = 571
     Top = 64
     Width = 339
     Align = alLeft
     Caption = 'Nodes'
-    ClientHeight = 549
+    ClientHeight = 552
     ClientWidth = 335
     Constraints.MinWidth = 302
     TabOrder = 2
     object m_tree: TTreeView
       Left = 0
-      Height = 513
+      Height = 516
       Top = 36
       Width = 335
       Align = alClient
       AutoExpand = True
-      DefaultItemHeight = 18
       Images = m_treeImages
       PopupMenu = m_treePopup
       ReadOnly = True
@@ -213,12 +212,12 @@ object MainForm: TMainForm
   end
   object m_valueGroup: TGroupBox
     Left = 344
-    Height = 569
+    Height = 571
     Top = 64
     Width = 646
     Align = alClient
     Caption = 'Keys && Values'
-    ClientHeight = 549
+    ClientHeight = 552
     ClientWidth = 642
     Constraints.MinWidth = 200
     TabOrder = 3
@@ -380,7 +379,7 @@ object MainForm: TMainForm
     end
     object m_values: TValueListEditor
       Left = 0
-      Height = 513
+      Height = 516
       Top = 36
       Width = 642
       Align = alClient
@@ -417,39 +416,39 @@ object MainForm: TMainForm
     Width = 990
     Align = alTop
     Caption = 'Connection'
-    ClientHeight = 44
+    ClientHeight = 45
     ClientWidth = 986
     Constraints.MinWidth = 800
     TabOrder = 4
     object m_serverLabel: TLabel
       Left = 16
-      Height = 15
+      Height = 17
       Top = 13
-      Width = 67
+      Width = 74
       Caption = 'ETCD Server:'
       ParentColor = False
     end
     object m_serverEdit: TComboBox
       Left = 104
-      Height = 23
+      Height = 27
       Top = 8
       Width = 312
-      ItemHeight = 15
+      ItemHeight = 0
       OnKeyDown = m_serverEditKeyDown
       OnSelect = m_serverEditSelect
       TabOrder = 0
     end
     object m_portLabel: TLabel
       Left = 427
-      Height = 15
+      Height = 17
       Top = 13
-      Width = 57
+      Width = 60
       Caption = 'ETCD Port:'
       ParentColor = False
     end
     object m_portEdit: TSpinEdit
       Left = 499
-      Height = 23
+      Height = 27
       Top = 8
       Width = 77
       MaxValue = 65536
@@ -718,11 +717,22 @@ object MainForm: TMainForm
     }
   end
   object m_treePopup: TPopupMenu
+    OnPopup = m_treePopupPopup
     left = 80
     top = 584
     object m_treeCopyItem: TMenuItem
       Caption = 'Copy path'
       OnClick = m_treeCopyItemClick
+    end
+    object m_treeBranchItem: TMenuItem
+      Caption = 'Copy branch'
+      OnClick = m_treeBranchItemClick
+    end
+    object m_treePasteItem: TMenuItem
+      Caption = 'Paste branch'
+    end
+    object m_treeSeparator: TMenuItem
+      Caption = '-'
     end
     object m_treeRemoveItem: TMenuItem
       Caption = 'Remove ...'

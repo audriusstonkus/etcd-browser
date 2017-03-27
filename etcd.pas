@@ -22,6 +22,7 @@ type TEtcdNode = class(TObject)
     m_name : string;
     m_nodes: array of TEtcdNode;
     m_values: array of TEtcdValue;
+    m_data: TJsonObject;
     function GetNode(index: integer) : TEtcdNode;
     function GetNodeCount: integer;
     function GetValue(index: integer) : TEtcdValue;
@@ -29,6 +30,7 @@ type TEtcdNode = class(TObject)
     function GetName: string;
   public
     property Name: string read m_name write m_name;
+    property Data: TJsonObject read m_data write m_data;
     property ShortName: string read GetName;
     property Nodes[Index: Integer]: TEtcdNode read GetNode;
     property NodeCount: integer read GetNodeCount;
@@ -38,6 +40,7 @@ type TEtcdNode = class(TObject)
     procedure AddNode(node: TEtcdNode);
     procedure AddValue(value: TEtcdValue);
     procedure ClearValues;
+    function AsJson: string;
 end;
 
 function LoadEtcdFolders(Data: TJSONData): TEtcdNode;
@@ -138,6 +141,14 @@ begin
   SetLength(m_values, 0);
 end;
 
+function TEtcdNode.AsJson: string;
+var str: string;
+begin
+  str := Data.AsJson;
+  str := str.Replace('\/', '/');
+  Result := str;
+end;
+
 function TEtcdValue.GetKey: string;
 var i: integer;
 begin
@@ -162,6 +173,7 @@ begin
   else begin
     Node := TEtcdNode.Create;
     Node.Name := Name;
+    Node.Data := JsonObject;
     if Subnodes <> Nil then begin
       for i := 0 to SubNodes.Count - 1 do begin
         SubNode := ParseNode(SubNodes.Objects[i]);

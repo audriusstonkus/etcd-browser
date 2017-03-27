@@ -7,13 +7,16 @@ interface
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ExtCtrls,
   ComCtrls, StdCtrls, Spin, Buttons, ValEdit, Grids, LCLType, Menus, Clipbrd,
-  Etcd, Rest, Types;
+  Etcd, Rest, Types, Utils;
 
 type
 
   { TMainForm }
 
   TMainForm = class(TForm)
+    m_treePasteItem: TMenuItem;
+    m_treeSeparator: TMenuItem;
+    m_treeBranchItem: TMenuItem;
     m_valueCopyItem: TMenuItem;
     m_valuePopup: TPopupMenu;
     m_treeRemoveItem: TMenuItem;
@@ -44,6 +47,7 @@ type
     m_treePopup: TPopupMenu;
     procedure FormCreate(Sender: TObject);
     procedure FormResize(Sender: TObject);
+    procedure m_treeBranchItemClick(Sender: TObject);
     procedure m_treeContextPopup(Sender: TObject; MousePos: TPoint;
       var Handled: Boolean);
     procedure m_treeCopyItemClick(Sender: TObject);
@@ -54,6 +58,7 @@ type
     procedure m_serverEditSelect(Sender: TObject);
     procedure m_treeAddButtonClick(Sender: TObject);
     procedure m_treeKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure m_treePopupPopup(Sender: TObject);
     procedure m_treeRemoveItemClick(Sender: TObject);
     procedure m_treeRefreshButtonClick(Sender: TObject);
     procedure m_treeRemoveButtonClick(Sender: TObject);
@@ -231,6 +236,11 @@ begin
   end;
 end;
 
+procedure TMainForm.m_treePopupPopup(Sender: TObject);
+begin
+  m_treePasteItem.Enabled := IsJson(Clipboard.AsText);
+end;
+
 procedure TMainForm.m_treeRemoveItemClick(Sender: TObject);
 begin
   m_treeRemoveButtonClick(Sender);
@@ -404,6 +414,17 @@ procedure TMainForm.FormResize(Sender: TObject);
 begin
   m_values.ColWidths[0] := Round(m_values.Width * 0.3);
   m_values.ColWidths[1] := Round(m_values.Width * 0.6);
+end;
+
+procedure TMainForm.m_treeBranchItemClick(Sender: TObject);
+var ActiveNode: TEtcdNode;
+    str: string;
+begin
+  if Assigned(m_tree.Selected) then begin
+    ActiveNode := TEtcdNode(m_tree.Selected.Data);
+    str := ActiveNode.AsJson;
+    ShowMessage(str);
+  end;
 end;
 
 procedure TMainForm.m_treeContextPopup(Sender: TObject; MousePos: TPoint;
