@@ -730,6 +730,7 @@ object MainForm: TMainForm
     end
     object m_treePasteItem: TMenuItem
       Caption = 'Paste branch'
+      OnClick = m_treePasteItemClick
     end
     object m_treeSeparator: TMenuItem
       Caption = '-'

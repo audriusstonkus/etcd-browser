@@ -58,6 +58,7 @@ type
     procedure m_serverEditSelect(Sender: TObject);
     procedure m_treeAddButtonClick(Sender: TObject);
     procedure m_treeKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure m_treePasteItemClick(Sender: TObject);
     procedure m_treePopupPopup(Sender: TObject);
     procedure m_treeRemoveItemClick(Sender: TObject);
     procedure m_treeRefreshButtonClick(Sender: TObject);
@@ -423,7 +424,19 @@ begin
   if Assigned(m_tree.Selected) then begin
     ActiveNode := TEtcdNode(m_tree.Selected.Data);
     str := ActiveNode.AsJson;
-    ShowMessage(str);
+    Clipboard.AsText := str;
+  end;
+end;
+
+procedure TMainForm.m_treePasteItemClick(Sender: TObject);
+var str: string;
+    ActiveNode: TEtcdNode;
+begin
+  str := Clipboard.AsText;
+  if not IsJson(str) then exit;
+  if Assigned(m_tree.Selected) then begin
+    ActiveNode := TEtcdNode(m_tree.Selected.Data);
+    CreateEtcdTree(ActiveNode, str);
   end;
 end;
 

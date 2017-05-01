@@ -45,6 +45,7 @@ end;
 
 function LoadEtcdFolders(Data: TJSONData): TEtcdNode;
 procedure LoadEtcdValues(Node: TEtcdNode; Data: TJSONData);
+procedure CreateEtcdTree(Node: TEtcdNode; str: string);
 
 implementation
 uses Dialogs;
@@ -217,6 +218,14 @@ begin
       end;
     end;
   end;
+end;
+
+procedure CreateEtcdTree(Node: TEtcdNode; str: string);
+var data: TJsonData;
+    subnode: TEtcdNode;
+begin
+  data := GetJson('{node: ' + str + '}');
+  subnode := LoadEtcdFolders(data);
 end;
 
 end.
