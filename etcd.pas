@@ -41,6 +41,7 @@ type TEtcdNode = class(TObject)
     procedure AddValue(value: TEtcdValue);
     procedure ClearValues;
     function AsJson: string;
+    procedure Rename(NewName: String);
 end;
 
 function LoadEtcdFolders(Data: TJSONData): TEtcdNode;
@@ -150,6 +151,22 @@ begin
   Result := str;
 end;
 
+procedure TEtcdNode.Rename(NewName: String);
+var i: integer;
+    SubNode: TEtcdNode;
+    Value: TEtcdValue;
+begin
+  for i := 0 to NodeCount - 1 do begin
+    SubNode := Nodes[i];
+    SubNode.Rename(NewName + SubNode.GetName);
+  end;
+  for i := 0 to ValueCount -1 do begin
+    Value := Values[i];
+    Value.m_key := NewName + '/' + Value.GetKey;
+  end;
+  m_name := NewName;
+end;
+
 function TEtcdValue.GetKey: string;
 var i: integer;
 begin
@@ -157,11 +174,21 @@ begin
   GetKey := Copy(m_key, i + 1, Length(m_key) - i);
 end;
 
+function ParseValue(JsonObject: TJSONObject): TEtcdValue;
+var Value: TEtcdValue;
+begin
+  Value := TEtcdValue.Create;
+  Value.Key := JsonObject.Get('key', '');
+  Value.Value := JsonObject.Get('value', '');
+  ParseValue := Value;
+end;
+
 function ParseNode(JsonObject: TJSONObject): TEtcdNode;
 var Node, SubNode: TEtcdNode;
     IsDir: Boolean;
     Name: string;
     SubNodes, EmptyArray: TJSONArray;
+    Value: TEtcdValue;
     i : integer;
 begin
   EmptyArray := Nil;
@@ -178,8 +205,12 @@ begin
     if Subnodes <> Nil then begin
       for i := 0 to SubNodes.Count - 1 do begin
         SubNode := ParseNode(SubNodes.Objects[i]);
-        if SubNode <> Nil then
+        if SubNode <> Nil then begin
           Node.AddNode(SubNode);
+        end
+        else begin
+          Node.AddValue(ParseValue(SubNodes.Objects[i]));
+        end;
       end;
     end;
     ParseNode := Node;
@@ -198,7 +229,6 @@ end;
 procedure LoadEtcdValues(Node: TEtcdNode; Data: TJSONData);
 var JsonObject, RootObject, EmptyObject, SubNode : TJSONObject;
     SubNodes, EmptyArray: TJSONArray;
-    Value: TEtcdValue;
     i : integer;
 begin
   EmptyObject := Nil;
@@ -211,21 +241,21 @@ begin
     for i := 0 to SubNodes.Count - 1 do begin
       SubNode := SubNodes.Objects[i];
       if not SubNode.Get('dir', False) then begin
-        Value := TEtcdValue.Create;
-        Value.Key := SubNode.Get('key', '');
-        Value.Value := SubNode.Get('value', '');
-        Node.AddValue(Value);
+        Node.AddValue(ParseValue(SubNode));
       end;
     end;
   end;
 end;
 
 procedure CreateEtcdTree(Node: TEtcdNode; str: string);
-var data: TJsonData;
-    subnode: TEtcdNode;
+var Data: TJsonData;
+    SubNode: TEtcdNode;
+    NewBase: string;
 begin
-  data := GetJson('{node: ' + str + '}');
-  subnode := LoadEtcdFolders(data);
+  Data := GetJson('{node: ' + str + '}');
+  SubNode := LoadEtcdFolders(data);
+  NewBase := Node.m_name + SubNode.GetName + '_Copy';
+  SubNode.Rename(NewBase);
 end;
 
 end.
