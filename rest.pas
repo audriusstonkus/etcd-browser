@@ -5,7 +5,7 @@ unit Rest;
 interface
 
 uses
-  Classes, SysUtils, fphttpclient, fpjson;
+  Classes, SysUtils, fphttpclient, fpjson, etcd;
 
 const
   ETCD_PROTOCOL = 'http';
@@ -26,6 +26,8 @@ type TEtcdRestClient = class(TObject)
     procedure CreateKey(Path: string; Name: string);
     procedure DeleteKey(Path: string);
     procedure SetKeyValue(Key: string; Value: string);
+    procedure CreateSubTree(Node: TEtcdNode);
+    function PathExists(Path: string): boolean;
 end;
 
 implementation
@@ -153,6 +155,32 @@ begin
       raise Exception.Create(IntToStr(ResponseStatusCode) + ' ' + Response);
   finally
     Free;
+  end;
+end;
+
+procedure TEtcdRestClient.CreateSubTree(Node: TEtcdNode);
+var i: integer;
+    Value: TEtcdValue;
+    SubNode: TEtcdNode;
+begin
+  CreateFolder(Node.Name, '');
+  for i := 0 to Node.ValueCount -1 do begin
+    Value := Node.Values[i];
+    SetKeyValue(Value.Key, Value.Value);
+  end;
+  for i := 0 to Node.NodeCount -1 do begin
+    SubNode := Node.Nodes[i];
+    CreateSubTree(SubNode);
+  end;
+end;
+
+function TEtcdRestClient.PathExists(Path: string): boolean;
+begin
+  try
+    LoadValuesInFolder(Path);
+    Result := True;
+  except
+    Result := False;
   end;
 end;
 

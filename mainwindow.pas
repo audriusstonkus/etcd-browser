@@ -429,14 +429,33 @@ begin
 end;
 
 procedure TMainForm.m_treePasteItemClick(Sender: TObject);
-var str: string;
-    ActiveNode: TEtcdNode;
+var str, NodeName: string;
+    ActiveNode, NewNode: TEtcdNode;
 begin
   str := Clipboard.AsText;
   if not IsJson(str) then exit;
-  if Assigned(m_tree.Selected) then begin
-    ActiveNode := TEtcdNode(m_tree.Selected.Data);
-    CreateEtcdTree(ActiveNode, str);
+  if not Assigned(m_tree.Selected) then exit;
+  ActiveNode := TEtcdNode(m_tree.Selected.Data);
+
+  with TNameWindow.Create(self) do try
+    SetText('');
+    ShowModal;
+    NodeName := GetText;
+  finally
+    Free;
+  end;
+  if NodeName = '' then exit;
+
+  NewNode := ParseEtcdSubTree(ActiveNode, NodeName, str);
+  if NewNode <> Nil then begin
+    if RestClient.PathExists(NewNode.Name) then begin
+      MessageDlg('Warning', 'This path already exists!',
+                 TMsgDlgType.mtWarning, [TMsgDlgBtn.mbOK], 0);
+    end
+    else begin
+      RestClient.CreateSubTree(NewNode);
+      Connect;
+    end;
   end;
 end;
 

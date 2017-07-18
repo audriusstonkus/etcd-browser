@@ -25,6 +25,7 @@ type
     { private declarations }
   public
     function GetText: string;
+    procedure SetText(str: string);
   end;
 
 
@@ -37,7 +38,8 @@ implementation
 procedure TNameWindow.m_okButtonClick(Sender: TObject);
 begin
   if GetText = '' then begin
-    MessageDlg('Warning', 'Name is empty - enter something!', TMsgDlgType.mtWarning, [TMsgDlgBtn.mbOK], 0);
+    MessageDlg('Warning', 'Name is empty - enter something!',
+               TMsgDlgType.mtWarning, [TMsgDlgBtn.mbOK], 0);
     FocusControl(m_nameEdit);
     Exit;
   end;
@@ -53,6 +55,12 @@ end;
 function TNameWindow.GetText: string;
 begin
   GetText := Trim(m_nameEdit.Text);
+end;
+
+procedure TNameWindow.SetText(str: string);
+begin
+  m_nameEdit.Text := str;
+  m_nameEdit.SelectAll;
 end;
 
 end.

@@ -46,7 +46,8 @@ end;
 
 function LoadEtcdFolders(Data: TJSONData): TEtcdNode;
 procedure LoadEtcdValues(Node: TEtcdNode; Data: TJSONData);
-procedure CreateEtcdTree(Node: TEtcdNode; str: string);
+function ParseEtcdSubTree(ParentNode: TEtcdNode; NodeName: string;
+  StrJson: string) : TEtcdNode;
 
 implementation
 uses Dialogs;
@@ -188,7 +189,6 @@ var Node, SubNode: TEtcdNode;
     IsDir: Boolean;
     Name: string;
     SubNodes, EmptyArray: TJSONArray;
-    Value: TEtcdValue;
     i : integer;
 begin
   EmptyArray := Nil;
@@ -247,15 +247,17 @@ begin
   end;
 end;
 
-procedure CreateEtcdTree(Node: TEtcdNode; str: string);
+function ParseEtcdSubTree(ParentNode: TEtcdNode; NodeName: string;
+  StrJson: string): TEtcdNode;
 var Data: TJsonData;
     SubNode: TEtcdNode;
     NewBase: string;
 begin
-  Data := GetJson('{node: ' + str + '}');
+  Data := GetJson('{node: ' + StrJson + '}');
   SubNode := LoadEtcdFolders(data);
-  NewBase := Node.m_name + SubNode.GetName + '_Copy';
+  NewBase := ParentNode.m_name + '/' + NodeName;
   SubNode.Rename(NewBase);
+  ParseEtcdSubTree := SubNode;
 end;
 
 end.
