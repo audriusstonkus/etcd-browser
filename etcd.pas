@@ -15,6 +15,7 @@ type TEtcdValue = class(TObject)
     property Key: string read m_key write m_key;
     property Value: string read m_value write m_value;
     property ShortKey: string read GetKey;
+    function AsJson: string;
 end;
 
 type TEtcdNode = class(TObject)
@@ -48,6 +49,7 @@ function LoadEtcdFolders(Data: TJSONData): TEtcdNode;
 procedure LoadEtcdValues(Node: TEtcdNode; Data: TJSONData);
 function ParseEtcdSubTree(ParentNode: TEtcdNode; NodeName: string;
   StrJson: string) : TEtcdNode;
+function ParseEtcdValue(StrJson: string): TEtcdValue;
 
 implementation
 uses Dialogs;
@@ -175,6 +177,14 @@ begin
   GetKey := Copy(m_key, i + 1, Length(m_key) - i);
 end;
 
+function TEtcdValue.AsJson: string;
+begin
+  AsJson := Format('{"key": "%s", "value": "%s"}', [
+         StringReplace(GetKey, '"', '\"', [rfReplaceAll]),
+         StringReplace(value, '"', '\"', [rfReplaceAll])
+         ]);
+end;
+
 function ParseValue(JsonObject: TJSONObject): TEtcdValue;
 var Value: TEtcdValue;
 begin
@@ -258,6 +268,13 @@ begin
   NewBase := ParentNode.m_name + '/' + NodeName;
   SubNode.Rename(NewBase);
   ParseEtcdSubTree := SubNode;
+end;
+
+function ParseEtcdValue(StrJson: string): TEtcdValue;
+var Data: TJsonData;
+begin
+  Data := GetJson(StrJson);
+  ParseEtcdValue := ParseValue(TJSONObject(Data));
 end;
 
 end.

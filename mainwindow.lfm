@@ -732,7 +732,7 @@ object MainForm: TMainForm
       Caption = 'Paste branch'
       OnClick = m_treePasteItemClick
     end
-    object m_treeSeparator: TMenuItem
+    object m_treeSeparatorItem: TMenuItem
       Caption = '-'
     end
     object m_treeRemoveItem: TMenuItem
@@ -741,11 +741,23 @@ object MainForm: TMainForm
     end
   end
   object m_valuePopup: TPopupMenu
+    OnPopup = m_valuePopupPopup
     left = 360
     top = 592
     object m_valueCopyItem: TMenuItem
       Caption = 'Copy path'
       OnClick = m_valueCopyItemClick
+    end
+    object m_valueCopyKeyItem: TMenuItem
+      Caption = 'Copy key and value'
+      OnClick = m_valueCopyKeyItemClick
+    end
+    object m_valuePasteKeyItem: TMenuItem
+      Caption = 'Paste key and value'
+      OnClick = m_valuePasteKeyItemClick
+    end
+    object m_valueSeparatorItem: TMenuItem
+      Caption = '-'
     end
     object m_valueRemoveItem: TMenuItem
       Caption = 'Remove ...'

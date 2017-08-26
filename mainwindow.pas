@@ -14,8 +14,11 @@ type
   { TMainForm }
 
   TMainForm = class(TForm)
+    m_valuePasteKeyItem: TMenuItem;
+    m_valueCopyKeyItem: TMenuItem;
+    m_valueSeparatorItem: TMenuItem;
     m_treePasteItem: TMenuItem;
-    m_treeSeparator: TMenuItem;
+    m_treeSeparatorItem: TMenuItem;
     m_treeBranchItem: TMenuItem;
     m_valueCopyItem: TMenuItem;
     m_valuePopup: TPopupMenu;
@@ -66,6 +69,9 @@ type
     procedure m_treeSelectionChanged(Sender: TObject);
     procedure m_valueAddButtonClick(Sender: TObject);
     procedure m_valueCopyItemClick(Sender: TObject);
+    procedure m_valueCopyKeyItemClick(Sender: TObject);
+    procedure m_valuePasteKeyItemClick(Sender: TObject);
+    procedure m_valuePopupPopup(Sender: TObject);
     procedure m_valueRefreshButtonClick(Sender: TObject);
     procedure m_valueRemoveButtonClick(Sender: TObject);
     procedure m_valueRemoveItemClick(Sender: TObject);
@@ -242,6 +248,11 @@ begin
   m_treePasteItem.Enabled := IsJson(Clipboard.AsText);
 end;
 
+procedure TMainForm.m_valuePopupPopup(Sender: TObject);
+begin
+  m_valuePasteKeyItem.Enabled := IsJson(Clipboard.AsText);
+end;
+
 procedure TMainForm.m_treeRemoveItemClick(Sender: TObject);
 begin
   m_treeRemoveButtonClick(Sender);
@@ -301,6 +312,36 @@ begin
   if (m_values.Row > 0) and (m_values.Keys[m_values.Row] <> '') then begin
     ActiveValue := TEtcdValue(m_values.Objects[0, m_values.Row]);
     Clipboard.AsText := ActiveValue.Key;
+  end;
+end;
+
+procedure TMainForm.m_valueCopyKeyItemClick(Sender: TObject);
+var ActiveValue: TEtcdValue;
+begin
+  if (m_values.Row > 0) and (m_values.Keys[m_values.Row] <> '') then begin
+    ActiveValue := TEtcdValue(m_values.Objects[0, m_values.Row]);
+    Clipboard.AsText := ActiveValue.AsJson;
+  end;
+end;
+
+procedure TMainForm.m_valuePasteKeyItemClick(Sender: TObject);
+var str: string;
+    ActiveNode: TETcdNode;
+    ActiveValue: TEtcdValue;
+begin
+  str := Clipboard.AsText;
+  if not IsJson(str) then exit;
+  if not Assigned(m_tree.Selected) then exit;
+  ActiveNode := TEtcdNode(m_tree.Selected.Data);
+  ActiveValue := ParseEtcdValue(str);
+  if ActiveValue <> Nil then try
+    RestClient.CreateKey(ActiveNode.Name, ActiveValue.ShortKey);
+    RestClient.SetKeyValue(ActiveNode.Name + '/' + ActiveValue.Key,
+                                           ActiveValue.Value);
+    LoadValues;
+  except
+    on E: Exception do
+    MessageDlg('Error', 'Error occured: ' + E.Message, mtError, [mbOK], 0);
   end;
 end;
 
