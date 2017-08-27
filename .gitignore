@@ -4,3 +4,4 @@ lib
 backup
 *.exe 
 macos/MacOS/etcd_browser
+windows/*.exe
