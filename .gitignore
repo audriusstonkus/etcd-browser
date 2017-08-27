@@ -3,3 +3,4 @@ lib
 /etcd_browser
 backup
 *.exe 
+macos/MacOS/etcd_browser
