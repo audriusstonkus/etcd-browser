@@ -1,0 +1,1 @@
+"c:\Program Files (x86)\NSIS\Bin\makensis.exe" etcd_browser.nsi

@@ -12,7 +12,7 @@ CRCCheck On
 ;---------------------------------
 ;General
  
-  OutFile "etcd_browser_installer.exe"
+  OutFile "etcd-browser-0.1.exe"
   ShowInstDetails "nevershow"
   ShowUninstDetails "nevershow"
   ;SetCompressor "bzip2"
