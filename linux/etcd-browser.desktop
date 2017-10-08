@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Exec=/usr/local/bin/etcd_browser
+Name=ETCD Browser
+GenericName=Simple UI for etcd key-value store
+Icon=etcd-browser
+Terminal=false
+Categories=Development

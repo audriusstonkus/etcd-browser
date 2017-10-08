@@ -1,7 +1,12 @@
 *.lps
 lib
-/etcd_browser
+etcd_browser
+etcd_browser.ico
 backup
 *.exe 
-macos/MacOS/etcd_browser
+macos/etcd-browser.app/Contents/MacOS/etcd_browser
+macos/*.dmg
 windows/*.exe
+linux/etcd-browser_0.1/usr
+linux/*.deb
+linux/*.rpm

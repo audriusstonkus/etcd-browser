@@ -1,0 +1,10 @@
+Package: etcd-browser
+Architecture: amd64
+Maintainer: Audrius Stonkus
+Depends: debconf (>= 0.5.00), xorg
+Priority: optional
+Version: 0.1
+Section: devel
+Homepage: https://github.com/audriusstonkus/etcd-browser
+Description: Simple UI for etcd key-value store
+ Allows to conveniently view and manage keys and values in etcd store
